@@ -4,6 +4,9 @@ import cors from "cors";
 
 import contactsRouter from "./routes/contactsRouter.js";
 import mongoose from "mongoose";
+import "dotenv/config";
+
+const { DB_HOST, PORT = 3000 } = process.env;
 
 const app = express();
 
@@ -23,10 +26,10 @@ app.use((err, req, res, next) => {
 });
 
 mongoose
-  .connect(process.env.DB_HOST)
+  .connect(DB_HOST)
   .then(() => {
-    app.listen(3000, () => {
-      console.log("Server is running. Use our API on port: 3000");
+    app.listen(PORT, () => {
+      console.log(`Server is running. Use our API on port: ${PORT}`);
     });
   })
   .catch((error) => {
@@ -34,4 +37,8 @@ mongoose
     process.exit(1);
   });
 
-// mongodb+srv://elenazyamileva:qTPBbbn6W6YAxbZW@cluster0.uimlwe4.mongodb.net/db_contacts?retryWrites=true&w=majority&appName=Cluster0
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", function (callback) {
+  console.log("Database connection successful");
+});
