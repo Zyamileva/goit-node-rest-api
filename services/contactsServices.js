@@ -1,18 +1,21 @@
 import Contact from "../models/Contacts.js";
 
-export const listContacts = () => Contact.find();
+export const listContacts = (filter = {}, setting = {}) =>
+  Contact.find(filter, "-createdAt -updatedAt", setting).populate(
+    "owner",
+    "username email"
+  );
+
+export const countContacts = (filter) => Contact.countDocuments(filter);
 
 export const addContact = (data) => Contact.create(data);
 
-export const getContactById = (id) => {
-  const data = Contact.findById(id);
-  return data;
-};
+export const getContactByFilter = (filter) => Contact.findOne(filter);
 
-export const updateContactById = (id, data) =>
-  Contact.findByIdAndUpdate(id, data);
+export const updateContactByFilter = (filter, data) =>
+  Contact.findOneAndUpdate(filter, data);
 
-export const updateStatusContact = (id, data) =>
-  Contact.findByIdAndUpdate(id, data);
+export const updateStatusContact = (filter, data) =>
+  Contact.findOneAndUpdate(filter, data);
 
-export const removeContact = (id) => Contact.findByIdAndDelete(id);
+export const removeContact = (filter) => Contact.findOneAndDelete(filter);

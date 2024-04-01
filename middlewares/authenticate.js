@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import HttpError from "../helpers/HttpError.js";
 
 import { findUser } from "../services/authServices.js";
-// const { JWT_SECRET } = process.env;
 
 const authenticate = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -29,7 +28,7 @@ const authenticate = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    next(HttpError(401, error.message));
+    next(HttpError(401, "Not authorized"));
   }
 };
 

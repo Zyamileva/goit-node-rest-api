@@ -61,7 +61,40 @@ const singin = async (req, res) => {
   });
 };
 
+const getCurrent = async (req, res) => {
+  const { subscription, email } = req.user;
+
+  res.json({
+    subscription,
+    email,
+  });
+};
+
+const signout = async (req, res) => {
+  const { _id } = req.user;
+  await authServices.updateUser({ _id }, { token: "" });
+
+  res.status(204).json({
+    message: "Signout success",
+  });
+};
+
+export const patchSubscription = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { _id } = req.user;
+  const result = await authServices.updateUser({ owner, _id: id }, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.status(200).json(result);
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(singin),
+  getCurrent: ctrlWrapper(getCurrent),
+  signout: ctrlWrapper(signout),
+  patchSubscription: ctrlWrapper(patchSubscription),
 };
