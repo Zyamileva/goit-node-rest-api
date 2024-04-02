@@ -50,25 +50,6 @@ const createContact = async (req, res) => {
   res.status(201).json(result);
 };
 
-const updateStatusContact = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { favorite } = req.body;
-
-  const { error } = contactsSchemas.updateContactSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-  const { id } = req.params;
-  const result = await contactsService.updateStatusContact(
-    { owner, _id: id },
-    req.body
-  );
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  res.json(result);
-};
-
 const updateContact = async (req, res) => {
   const { _id: owner } = req.user;
   const { name, email, phone } = req.body;
@@ -96,6 +77,5 @@ export default {
   getOneContact: ctrlWrapper(getOneContact),
   createContact: ctrlWrapper(createContact),
   updateContact: ctrlWrapper(updateContact),
-  updateStatusContact: ctrlWrapper(updateStatusContact),
   deleteContact: ctrlWrapper(deleteContact),
 };

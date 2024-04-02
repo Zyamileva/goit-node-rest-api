@@ -80,11 +80,8 @@ const signout = async (req, res) => {
 };
 
 export const patchSubscription = async (req, res) => {
-  const { _id: owner } = req.user;
   const { _id } = req.user;
-  const result = await authServices.updateUser({ owner, _id: id }, req.body, {
-    new: true,
-  });
+  const result = await authServices.updateUser({ _id }, req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
