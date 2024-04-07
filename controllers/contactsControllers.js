@@ -2,6 +2,9 @@ import * as contactsService from "../services/contactsServices.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import * as contactsSchemas from "../schemas/contactsSchemas.js";
+import fs from "fs/promises";
+import path from "path";
+const posterPath = path.resolve("public", "posters");
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -42,6 +45,11 @@ const deleteContact = async (req, res) => {
 
 const createContact = async (req, res) => {
   const { _id: owner } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(posterPath, filename);
+  await fs.rename(oldPath, newPath);
+  const poster = path.join("posters", filename);
+
   const { error } = contactsSchemas.createContactSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);

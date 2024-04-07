@@ -4,6 +4,7 @@ import { subscriptionSchema } from "../schemas/contactsSchemas.js";
 import authControllers from "../controllers/authControlers.js";
 import validateBody from "../decorators/validateBody.js";
 import authenticate from "../middlewares/authenticate.js";
+import upload from "../middlewares/upload.js";
 
 const authRouter = express.Router();
 
@@ -30,4 +31,10 @@ authRouter.patch(
   authControllers.patchSubscription
 );
 
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatarURL"),
+  authControllers.updateAvatar
+);
 export default authRouter;
