@@ -25,16 +25,17 @@ authRouter.get("/current", authenticate, authControllers.getCurrent);
 authRouter.post("/logout", authenticate, authControllers.signout);
 
 authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatarURL"),
+  authControllers.updateAvatar
+);
+
+authRouter.patch(
   "/",
   authenticate,
   validateBody(subscriptionSchema),
   authControllers.patchSubscription
 );
 
-authRouter.patch(
-  "/avatars",
-  authenticate,
-  upload.single("avatarURL"),
-  authControllers.updateAvatar
-);
 export default authRouter;

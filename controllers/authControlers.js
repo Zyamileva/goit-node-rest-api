@@ -22,11 +22,7 @@ const signup = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const secureUrl = gravatar.url(
-    email,
-    { s: "250", r: "g", d: "anime", d: "404" },
-    true
-  );
+  const secureUrl = gravatar.url(email, { s: "250", r: "g" }, true);
 
   const newUser = await authServices.signup({
     ...req.body,
@@ -105,7 +101,6 @@ export const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: oldPath, filename } = req.file;
   const newPath = path.join(avatarsPath, filename);
-  console.log(newPath);
   jimp.read(oldPath, (err, image) => {
     if (err) throw HttpError(401, err);
     image.resize(250, 250).write(newPath);
@@ -118,7 +113,7 @@ export const updateAvatar = async (req, res) => {
       avatarURL,
     }
   );
-  res.status(200).json();
+  res.status(200).json({ avatarURL });
 };
 
 export default {

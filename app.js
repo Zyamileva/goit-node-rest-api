@@ -31,6 +31,7 @@ app.use((err, req, res, next) => {
 mongoose
   .connect(DB_HOST)
   .then(() => {
+    console.log("Database connection successful");
     app.listen(PORT, () => {
       console.log(`Server is running. Use our API on port: ${PORT}`);
     });
@@ -40,8 +41,4 @@ mongoose
     process.exit(1);
   });
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function (callback) {
-  console.log("Database connection successful");
-});
+export default app;
