@@ -1,5 +1,9 @@
 import express from "express";
-import { userSignupSchema, userSigninSchema } from "../schemas/usersSchemas.js";
+import {
+  userSignupSchema,
+  userSigninSchema,
+  userEmailSchema,
+} from "../schemas/usersSchemas.js";
 import { subscriptionSchema } from "../schemas/contactsSchemas.js";
 import authControllers from "../controllers/authControlers.js";
 import validateBody from "../decorators/validateBody.js";
@@ -12,6 +16,14 @@ authRouter.post(
   "/register",
   validateBody(userSignupSchema),
   authControllers.signup
+);
+
+authRouter.get("/verify/:verificationToken", authControllers.verify);
+
+authRouter.post(
+  "/verify",
+  validateBody(userEmailSchema),
+  authControllers.resendVerify
 );
 
 authRouter.post(

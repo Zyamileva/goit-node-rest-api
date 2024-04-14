@@ -16,3 +16,11 @@ export const userSigninSchema = Joi.object({
   email: Joi.string().pattern(emailRegepxp).required(),
   token: Joi.string().default(null),
 });
+
+export const userEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegepxp).required(),
+});
+
+const joiVerifySchema = Joi.object({
+  email: Joi.string().required(),
+});
